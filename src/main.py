@@ -18,11 +18,10 @@ def getOptionsChain(inputString):
     YFticker = yf.Ticker(inputString)
     global DateArray
     DateArray = YFticker.options
-    print("Options Chain Recieved")
 
 
 def displayOptionsChain():
-    #print("Items: " + len(DateArray))
+    print("Length of the Chain: " + str(len(DateArray)) + "\n")
     print("\n".join(DateArray))
 
 
