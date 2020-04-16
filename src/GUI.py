@@ -39,7 +39,7 @@ def pickStrikePrice(choices):
             self.label2.SetLabel("You picked " + self.combobox.GetValue())
             global choice
             choice = self.combobox.GetValue()
-            print("Choice confirmed")
+            print("Choice confirmed was: " + choice)
             time.sleep(1.5)
             self.Destroy()
 
