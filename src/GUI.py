@@ -10,31 +10,37 @@ def onButton():
     dlg = wx.TextEntryDialog(frame, 'Enter a Stock Ticker', 'Text Entry')
     dlg.SetValue("AAPL")
     if dlg.ShowModal() == wx.ID_OK:
-        #print('Ticker entered was: %s\n' % dlg.GetValue())
+        # print('Ticker entered was: %s\n' % dlg.GetValue())
         return dlg.GetValue()
     dlg.Destroy()
 
 
-class MainFrame(wx.Frame):
-    def __init__(self):
-        wx.Frame.__init__(self, parent=None,
-                          title="Communication Port", size=(300, 200))
-        self.panel = wx.Panel(self)
-        self.selComButton = wx.Button(self.panel, -1, "Select Comport")
-        self.selComButton.SetToolTip("Select Comport")
-        self.selComButton.Bind(wx.EVT_BUTTON, self.selectPopUp)
+def pickStrikePrice():
 
-    def selectPopUp(self, event):
-        dlg = wx.SingleChoiceDialog(None, "Pick a com port", "Com ports", [
-                                    "Com1", "Com2", "Com3", "Com4"], wx.CHOICEDLG_STYLE)
-        if dlg.ShowModal() == wx.ID_OK:
-            res = dlg.GetStringSelection()
-            self.selComButton.SetLabel(res)
-        dlg.Destroy()
+    class MyFrame(wx.Frame):
+        def __init__(self, parent, title):
+            super(MyFrame, self).__init__(parent, title=title, size=(600, 400))
+            self.panel = MyPanel(self)
 
+    class MyPanel(wx.Panel):
+        def __init__(self, parent):
+            super(MyPanel, self).__init__(parent)
+            self.label = wx.StaticText(
+                self, label="What Programming Language You Like?", pos=(50, 30))
+            languages = ['Java', 'C++', 'C#',
+                         'Python', 'Erlang', 'PHP', 'Ruby']
+            self.combobox = wx.ComboBox(self, choices=languages, pos=(50, 50))
+            self.label2 = wx.StaticText(self, label="", pos=(50, 80))
+            self.Bind(wx.EVT_COMBOBOX, self.OnCombo)
 
-if __name__ == "__main__":
-    app = wx.App()
-    frame = MainFrame()
-    frame.Show()
+        def OnCombo(self, event):
+            self.label2.SetLabel("You Like " + self.combobox.GetValue())
+
+    class MyApp(wx.App):
+        def OnInit(self):
+            self.frame = MyFrame(parent=None, title="Combobox")
+            self.frame.Show()
+            return True
+
+    app = MyApp()
     app.MainLoop()

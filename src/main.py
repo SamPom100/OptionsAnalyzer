@@ -1,8 +1,9 @@
 import yfinance as yf
 from GUI import onButton
+from GUI import pickStrikePrice
 
 # Default ticker is Apple
-ticker = "SPY"
+ticker = "AAPL"
 DateArray = yf.Ticker(ticker).options
 
 
@@ -28,3 +29,4 @@ def displayOptionsChain():
 askForTicker()
 getOptionsChain(ticker)
 displayOptionsChain()
+pickStrikePrice()
