@@ -38,3 +38,6 @@ askForTicker()
 getOptionsChain(ticker)
 displayOptionsChain()
 pickAStrike()
+
+
+print("All done")
