@@ -5,6 +5,7 @@ from GUI import pickStrikePrice
 # Default ticker is Apple
 ticker = "AAPL"
 DateArray = yf.Ticker(ticker).options
+strikeChoice = "temp"
 
 
 def askForTicker():
@@ -26,7 +27,13 @@ def displayOptionsChain():
     print("\n".join(DateArray))
 
 
+def pickAStrike():
+    global strikeChoice
+    strikeChoice = pickStrikePrice(DateArray)
+    print("Strike Choice was: " + strikeChoice)
+
+
 askForTicker()
 getOptionsChain(ticker)
 displayOptionsChain()
-pickStrikePrice()
+pickAStrike()
