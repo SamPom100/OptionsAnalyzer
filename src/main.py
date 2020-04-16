@@ -27,5 +27,4 @@ def displayOptionsChain():
 
 askForTicker()
 getOptionsChain(ticker)
-
 displayOptionsChain()
