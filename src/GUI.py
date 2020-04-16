@@ -1,6 +1,8 @@
 import wx
 import time
 
+choice = "test"
+
 
 def onButton():
     print("Button pressed.")
@@ -35,8 +37,11 @@ def pickStrikePrice(choices):
 
         def OnCombo(self, event):
             self.label2.SetLabel("You picked " + self.combobox.GetValue())
-            print(self.combobox.GetValue())
-            return self.combobox.GetValue()
+            global choice
+            choice = self.combobox.GetValue()
+            print("Choice confirmed")
+            time.sleep(1.5)
+            self.Destroy()
 
         def closeWindow(self, event):
             self.Destroy()  # This will close the app window.
@@ -49,3 +54,8 @@ def pickStrikePrice(choices):
 
     app = MyApp()
     app.MainLoop()
+
+
+def returnChoice():
+    global choice
+    return choice
