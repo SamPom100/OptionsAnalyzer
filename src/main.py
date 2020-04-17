@@ -5,6 +5,7 @@ from GUI import *
 ticker = "AAPL"
 DateArray = yf.Ticker(ticker).options
 strikeChoice = None
+opt = None
 
 
 def askForTicker():
@@ -33,9 +34,27 @@ def pickAStrike():
     print("Strike Choice was: " + strikeChoice)
 
 
+def getCalls():
+    global opt
+    opt = yf.Ticker(ticker).option_chain(strikeChoice)
+    print("****************** Calls *********************")
+    print(opt.calls)
+
+
+def getPuts():
+    global opt
+    opt = yf.Ticker(ticker).option_chain(strikeChoice)
+    print("****************** Puts *********************")
+    print(opt.puts)
+
+
 askForTicker()
 getOptionsChain(ticker)
 displayOptionsChain()
 pickAStrike()
+getCalls()
+getPuts()
+print(opt.puts['strike'])
+
 
 print("All done")
