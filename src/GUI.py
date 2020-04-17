@@ -39,11 +39,7 @@ def pickStrikePrice(choices):
             self.label2.SetLabel("You picked " + self.combobox.GetValue())
             global choice
             choice = self.combobox.GetValue()
-            print("Choice confirmed was: " + choice)
-            time.sleep(1.5)
-
-        def closeWindow(self, event):
-            self.Destroy()  # This will close the app window.
+            app.ExitMainLoop()
 
     class MyApp(wx.App):
         def OnInit(self):
