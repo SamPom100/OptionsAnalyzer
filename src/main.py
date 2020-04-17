@@ -1,5 +1,6 @@
 import yfinance as yf
 from GUI import *
+from ComboBox import *
 
 # Default ticker is Apple
 ticker = "AAPL"
@@ -28,7 +29,7 @@ def displayOptionsChain():
 
 def pickAStrike():
     global strikeChoice
-    pickStrikePrice(DateArray)
+    # pickStrikePrice(DateArray)
     print("Strike Choice was:" + returnChoice())
 
 

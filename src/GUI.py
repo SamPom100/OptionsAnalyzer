@@ -41,7 +41,6 @@ def pickStrikePrice(choices):
             choice = self.combobox.GetValue()
             print("Choice confirmed was: " + choice)
             time.sleep(1.5)
-            self.Destroy()
 
         def closeWindow(self, event):
             self.Destroy()  # This will close the app window.
