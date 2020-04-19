@@ -2,6 +2,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from PIL import Image
 from GUI import *
 from scrolly import *
@@ -177,8 +178,10 @@ def threedeegraph(object):
     # the bars' heights
     dz = eg.values.ravel()
 
-    # plot
-    ax.bar3d(xpos, ypos, zpos, dx, dy, dz)
+    # plot and color
+    values = np.linspace(0.2, 1., xpos.ravel().shape[0])
+    colors = cm.rainbow(values)
+    ax.bar3d(xpos, ypos, zpos, dx, dy, dz, color=colors)
 
     # put the column / index labels
     ax.w_yaxis.set_ticklabels(eg.columns)
@@ -188,7 +191,7 @@ def threedeegraph(object):
     ax.set_xlabel('Strike')
     ax.set_ylabel('Date')
     ax.set_zlabel('Open Interest')
-    fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
+    #fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
 
     plt.show()
 
