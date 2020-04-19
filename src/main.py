@@ -1,9 +1,8 @@
 import yfinance as yf
-#import tabulate as tabulate
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 from GUI import *
+from scrolly import *
 
 # Default ticker is Apple
 ticker = "AAPL"
@@ -91,10 +90,12 @@ def OIChart():
     tempFrame.rename(columns={'openInterest': 'Puts'}, inplace=True)
     #finalFrame = pd.concat([finalFrame, tempFrame])
     finalFrame = pd.merge(finalFrame, tempFrame, on='strike')
-    finalFrame.plot.bar(x="strike", y=["Calls", "Puts"],
+    finalFrame.plot.bar(figsize=(20, 8), x="strike", y=["Calls", "Puts"],
                         title="Open Interest for "+ticker.upper()+" all options at every strike on "+strikeChoice)
 
     ####################
+    fig = plt.figure()
+    a = ScrollableWindow(fig)
     plt.show(block=True)
     print("***********************")
 
