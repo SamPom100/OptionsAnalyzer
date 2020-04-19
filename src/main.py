@@ -95,9 +95,7 @@ def OIChart():
                         title="Open Interest for "+ticker.upper()+" all options at every strike on "+strikeChoice)
 
     ####################
-
     plt.show(block=True)
-
     print("***********************")
 
 
@@ -105,14 +103,17 @@ def askForStrikePrice():
     pickStrikePrice(calls['strike'].astype(str).tolist())
 
 
-askForTicker()  # get ticker of choice from user
-getOptionsChain(ticker)  # get entire option chain from yFinance
-# displayOptionsChain() #show entire option chain
-pickAStrike()  # asks user for specific date
-sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
-# displays calls and puts at once as a merged and cleaned table
-displayCleanOptionChain()
-OIChart()
+try:
+    askForTicker()  # get ticker of choice from user
+    getOptionsChain(ticker)  # get entire option chain from yFinance
+    # displayOptionsChain() #show entire option chain
+    pickAStrike()  # asks user for specific date
+    sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
+    # displays calls and puts at once as a merged and cleaned table
+    displayCleanOptionChain()
+    OIChart()
+except:
+    print("error")
 
 # askForStrikePrice()  # prompts user to choose a strike from the table
 
