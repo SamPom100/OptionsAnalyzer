@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
+from PIL import Image
 from GUI import *
 from scrolly import *
 
@@ -94,9 +95,12 @@ def OIChart():
                         title="Open Interest for "+ticker.upper()+" all options at every strike on "+strikeChoice)
 
     ####################
-    fig = plt.figure()
-    a = ScrollableWindow(fig)
-    plt.show(block=True)
+    #fig = plt.figure()
+    #a = ScrollableWindow(fig)
+    plt.savefig("out.png")
+    img = Image.open('out.png')
+    img.show()
+    # plt.show(block=True)
     print("***********************")
 
 
@@ -104,19 +108,22 @@ def askForStrikePrice():
     pickStrikePrice(calls['strike'].astype(str).tolist())
 
 
-try:
-    askForTicker()  # get ticker of choice from user
-    getOptionsChain(ticker)  # get entire option chain from yFinance
-    # displayOptionsChain() #show entire option chain
-    pickAStrike()  # asks user for specific date
-    sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
-    # displays calls and puts at once as a merged and cleaned table
-    displayCleanOptionChain()
-    OIChart()
-except:
-    print("error")
+def main():
 
-# askForStrikePrice()  # prompts user to choose a strike from the table
+    try:
+        askForTicker()  # get ticker of choice from user
+        getOptionsChain(ticker)  # get entire option chain from yFinance
+        # displayOptionsChain() #show entire option chain
+        pickAStrike()  # asks user for specific date
+        sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
+        # displays calls and puts at once as a merged and cleaned table
+        displayCleanOptionChain()
+        OIChart()
+    except:
+        print("error")
+
+    # askForStrikePrice()  # prompts user to choose a strike from the table
 
 
+main()
 print("All done")
