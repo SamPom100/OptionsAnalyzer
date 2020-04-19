@@ -1,5 +1,5 @@
 import yfinance as yf
-import tabulate as tabulate
+#import tabulate as tabulate
 import pandas as pd
 from GUI import *
 
