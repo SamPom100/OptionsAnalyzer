@@ -66,12 +66,29 @@ def getPuts():
     print(puts)
 
 
+def displayCleanOptionChain():
+    print("****************** Calls **********************    ---[" + ticker.upper(
+    )+"]---    ******************** Puts ********************* ")
+    temp = {'             ': [""]}
+    tempPD = pd.DataFrame(data=temp)
+    merged = pd.concat([calls, tempPD, puts], axis=1)
+    merged = merged.fillna("")
+    # merged.style.hide_index()
+    print(merged.to_string(index=False))
+
+
+def askForStrikePrice():
+    pickStrikePrice(calls['strike'].astype(str).tolist())
+
+
 askForTicker()  # get ticker of choice from user
 getOptionsChain(ticker)  # get entire option chain from yFinance
 # displayOptionsChain() #show entire option chain
 pickAStrike()  # asks user for specific date
 sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
-getCalls()
+# displays calls and puts at once as a merged and cleaned table
+displayCleanOptionChain()
+askForStrikePrice()  # prompts user to choose a strike from the table
 
 
 print("All done")
