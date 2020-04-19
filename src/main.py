@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from GUI import *
 from scrolly import *
+import seaborn as sb
 
 # Default ticker is Apple
-ticker = "AAPL"
+ticker = "AMD"
 DateArray = yf.Ticker(ticker).options
 strikeChoice = None
 opt = None
@@ -45,18 +46,28 @@ def pickAStrike():
 def sortCallsandPuts():
     global calls, puts, opt
     calls = opt.calls
-    calls = calls.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
-                                "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency"])
+    calls = cleaner(calls)
     calls['Mid Price'] = calls.apply(lambda row: (row.ask + row.bid)/2, axis=1)
     calls = calls.drop(columns=["ask", "bid"])
     calls = calls[["strike", "Mid Price", "openInterest", "impliedVolatility"]]
 
     puts = opt.puts
-    puts = puts.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
-                              "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency"])
+    puts = cleaner(puts)
     puts['Mid Price'] = puts.apply(lambda row: (row.ask + row.bid)/2, axis=1)
     puts = puts.drop(columns=["ask", "bid"])
     puts = puts[["strike", "Mid Price", "openInterest", "impliedVolatility"]]
+
+
+def cleaner(object):
+    return object.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
+                                "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency"])
+
+
+def heatCleaner(object):
+    object = object.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
+                                  "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency", "impliedVolatility", "ask", "bid"])
+    object = object[["strike", "openInterest"]]
+    return object
 
 
 def getCalls():
@@ -89,41 +100,61 @@ def OIChart():
     tempFrame = pd.DataFrame(putData)
 
     tempFrame.rename(columns={'openInterest': 'Puts'}, inplace=True)
-    #finalFrame = pd.concat([finalFrame, tempFrame])
+    # finalFrame = pd.concat([finalFrame, tempFrame])
     finalFrame = pd.merge(finalFrame, tempFrame, on='strike')
     finalFrame.plot.bar(figsize=(20, 8), x="strike", y=["Calls", "Puts"],
                         title="Open Interest for "+ticker.upper()+" all options at every strike on "+strikeChoice)
 
     ####################
-    #fig = plt.figure()
-    #a = ScrollableWindow(fig)
+    # fig = plt.figure()
+    # a = ScrollableWindow(fig)
     plt.savefig("out.png")
     img = Image.open('out.png')
     img.show()
     # plt.show(block=True)
     print("***********************")
 
+# dataframe place NaN with 0
+
+
+def HeatMap():
+    callsArray = heatCleaner(opt.calls)
+    callsArray.rename(columns={'openInterest': DateArray[1]}, inplace=True)
+    for x in range(2, len(DateArray)-1):
+        opt2 = yf.Ticker(ticker).option_chain(DateArray[x])
+        callsArray2 = heatCleaner(opt2.calls)
+        callsArray2.rename(
+            columns={'openInterest': DateArray[x]}, inplace=True)
+        callsArray = pd.merge(callsArray, callsArray2, on='strike')
+    #
+
+    callsArray.set_index('strike', inplace=True)
+
+    print(callsArray)
+    heat_map = sb.heatmap(callsArray, cmap="Blues", linewidths=.7)
+    plt.yticks(rotation=0)
+    plt.xticks(rotation=70)
+    plt.gca().invert_yaxis()
+    plt.show()
+
 
 def askForStrikePrice():
     pickStrikePrice(calls['strike'].astype(str).tolist())
 
 
-def main():
+askForTicker()  # get ticker of choice from user
+getOptionsChain(ticker)  # get entire option chain from yFinance
+# displayOptionsChain() #show entire option chain
+pickAStrike()  # asks user for specific date
+sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
+# displays calls and puts at once as a merged and cleaned table
+displayCleanOptionChain()
+# OIChart()
 
-    try:
-        askForTicker()  # get ticker of choice from user
-        getOptionsChain(ticker)  # get entire option chain from yFinance
-        # displayOptionsChain() #show entire option chain
-        pickAStrike()  # asks user for specific date
-        sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
-        # displays calls and puts at once as a merged and cleaned table
-        displayCleanOptionChain()
-        OIChart()
-    except:
-        print("error")
-
-    # askForStrikePrice()  # prompts user to choose a strike from the table
+HeatMap()
 
 
-main()
+# askForStrikePrice()  # prompts user to choose a strike from the table
+
+
 print("All done")
