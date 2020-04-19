@@ -1,3 +1,4 @@
+from mpl_toolkits.mplot3d import Axes3D
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -5,6 +6,8 @@ from PIL import Image
 from GUI import *
 from scrolly import *
 import seaborn as sb
+from mpl_toolkits.mplot3d import axes3d
+import numpy as np
 
 # Default ticker is Apple
 ticker = "AMD"
@@ -13,6 +16,7 @@ strikeChoice = None
 opt = None
 calls = None
 puts = None
+callsArrayStore = None
 
 
 def askForTicker():
@@ -131,10 +135,61 @@ def HeatMap():
     callsArray.set_index('strike', inplace=True)
 
     print(callsArray)
-    heat_map = sb.heatmap(callsArray, cmap="Blues", linewidths=.7)
+    # plt.style.use("dark_background")
+    heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
+
+    global callsArrayStore
+    callsArrayStore = callsArray
     plt.yticks(rotation=0)
-    plt.xticks(rotation=70)
+    plt.xticks(rotation=50)
     plt.gca().invert_yaxis()
+    plt.show()
+
+
+def threedeegraph(object):
+
+    eg = object
+
+    # thickness of the bars
+    dx, dy = .8, .8
+
+    # prepare 3d axes
+    fig = plt.figure(figsize=(10, 6))
+    ax = Axes3D(fig)
+
+    # set up positions for the bars
+    xpos = np.arange(eg.shape[0])
+    ypos = np.arange(eg.shape[1])
+
+    # set the ticks in the middle of the bars
+    ax.set_xticks(xpos + dx/2)
+    ax.set_yticks(ypos + dy/2)
+
+    # create meshgrid
+    # print xpos before and after this block if not clear
+    xpos, ypos = np.meshgrid(xpos, ypos)
+    xpos = xpos.flatten()
+    ypos = ypos.flatten()
+
+    # the bars starts from 0 attitude
+    zpos = np.zeros(eg.shape).flatten()
+
+    # the bars' heights
+    dz = eg.values.ravel()
+
+    # plot
+    ax.bar3d(xpos, ypos, zpos, dx, dy, dz)
+
+    # put the column / index labels
+    ax.w_yaxis.set_ticklabels(eg.columns)
+    ax.w_xaxis.set_ticklabels(eg.index)
+
+    # name the axes
+    ax.set_xlabel('Strike')
+    ax.set_ylabel('Date')
+    ax.set_zlabel('Open Interest')
+    fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
+
     plt.show()
 
 
@@ -152,6 +207,7 @@ displayCleanOptionChain()
 # OIChart()
 
 HeatMap()
+threedeegraph(callsArrayStore)
 
 
 # askForStrikePrice()  # prompts user to choose a strike from the table
