@@ -1,6 +1,8 @@
 import yfinance as yf
 #import tabulate as tabulate
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 from GUI import *
 
 # Default ticker is Apple
@@ -75,6 +77,16 @@ def displayCleanOptionChain():
     merged = merged.fillna("")
     # merged.style.hide_index()
     print(merged.to_string(index=False))
+    ############
+
+
+def openInterestChart():
+    data = calls.drop(columns=['Mid Price', 'impliedVolatility'])
+    df = pd.DataFrame(data)
+    df.plot.bar(legend=None, x="strike", y="openInterest",
+                title="Open Interest for "+ticker+" at every strike on "+strikeChoice)
+    plt.show(block=True)
+    print("***********************")
 
 
 def askForStrikePrice():
@@ -88,7 +100,8 @@ pickAStrike()  # asks user for specific date
 sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
 # displays calls and puts at once as a merged and cleaned table
 displayCleanOptionChain()
-askForStrikePrice()  # prompts user to choose a strike from the table
+openInterestChart()
+# askForStrikePrice()  # prompts user to choose a strike from the table
 
 
 print("All done")
