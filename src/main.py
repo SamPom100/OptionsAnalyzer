@@ -25,7 +25,8 @@ def getOptionsChain(inputString):
     # Retrieve the Options Chain Expiration dates from Yahoo Finance
     YFticker = yf.Ticker(inputString)
     global DateArray
-    DateArray = YFticker.options
+    tempTuple = ("Pick a Strike Price",)
+    DateArray = tempTuple+YFticker.options
 
 
 def displayOptionsChain():
@@ -80,12 +81,23 @@ def displayCleanOptionChain():
     ############
 
 
-def openInterestChart():
-    data = calls.drop(columns=['Mid Price', 'impliedVolatility'])
-    df = pd.DataFrame(data)
-    df.plot.bar(legend=None, x="strike", y="openInterest",
-                title="Open Interest for "+ticker+" at every strike on "+strikeChoice)
+def OIChart():
+    callData = calls.drop(columns=['Mid Price', 'impliedVolatility'])
+    putData = puts.drop(columns=['Mid Price', 'impliedVolatility'])
+    finalFrame = pd.DataFrame(callData)
+    finalFrame.rename(columns={'openInterest': 'Calls'}, inplace=True)
+    tempFrame = pd.DataFrame(putData)
+
+    tempFrame.rename(columns={'openInterest': 'Puts'}, inplace=True)
+    #finalFrame = pd.concat([finalFrame, tempFrame])
+    finalFrame = pd.merge(finalFrame, tempFrame, on='strike')
+    finalFrame.plot.bar(x="strike", y=["Calls", "Puts"],
+                        title="Open Interest for "+ticker.upper()+" all options at every strike on "+strikeChoice)
+
+    ####################
+
     plt.show(block=True)
+
     print("***********************")
 
 
@@ -100,7 +112,8 @@ pickAStrike()  # asks user for specific date
 sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
 # displays calls and puts at once as a merged and cleaned table
 displayCleanOptionChain()
-openInterestChart()
+OIChart()
+
 # askForStrikePrice()  # prompts user to choose a strike from the table
 
 
