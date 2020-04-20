@@ -1,4 +1,4 @@
-# OptionsAnalyzer
+# OptionsAnalyzer (BETA VERSION)
 
 ## How to use the text menu
 *Commands are setticker, setstrike, optionchain, OIChart, volumeheat, OIheat, volume3D, OI3D, exit*
