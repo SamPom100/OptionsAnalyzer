@@ -3,7 +3,6 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import cm
-import gc
 from PIL import Image
 from GUI import *
 from scrolly import *
@@ -112,10 +111,9 @@ def OIChart():
                         title="Open Interest for "+ticker.upper()+" all options at every strike on "+strikeChoice)
 
     ####################
-    #fig = plt.figure()
+    # fig = plt.figure()
     # a = ScrollableWindow(fig)
     plt.savefig("out.png")
-    plt.clf()
     img = Image.open('out.png')
     img.show()
     # plt.show(block=True)
@@ -146,15 +144,11 @@ def HeatMap():
     plt.yticks(rotation=0)
     plt.xticks(rotation=50)
     plt.gca().invert_yaxis()
-    plt.title("Open interest for all options of " + ticker + " per strike")
     plt.show()
-    plt.clf()
-    gc.collect(2)
 
 
 def threedeegraph(object):
 
-    plt.xticks(rotation=0)
     eg = object
 
     # thickness of the bars
@@ -195,12 +189,11 @@ def threedeegraph(object):
 
     # name the axes
     ax.set_xlabel('Strike')
-    # ax.set_ylabel('Date')
+    ax.set_ylabel('Date')
     ax.set_zlabel('Open Interest')
-    ax.set_title('Open Interest 3D Bar Graph')
     #fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
+
     plt.show()
-    plt.clf()
 
 
 def askForStrikePrice():
