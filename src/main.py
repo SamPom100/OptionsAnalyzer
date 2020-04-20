@@ -13,11 +13,7 @@ import numpy as np
 # Default ticker is Apple
 ticker = "AMD"
 DateArray = yf.Ticker(ticker).options
-strikeChoice = None
-opt = None
-calls = None
-puts = None
-callsArrayStore = None
+strikeChoice, opt, calls, puts, callsArrayStore = None, None, None, None, None
 
 
 def askForTicker():
@@ -75,19 +71,17 @@ def cleaner(object):
                                 "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency"])
 
 
-def heatCleaner(object):
+def OICleaner(object):
     object = object.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
                                   "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency", "impliedVolatility", "ask", "bid"])
     object = object[["strike", "openInterest"]]
     return object
 
 
-def heatCleaner2(object):
-    object.drop(columns=["openInterest"])
-    object.rename(columns={'volume': 'openInterest'}, inplace=True)
+def VolumeCleaner(object):
     object = object.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
-                                  "change", "percentChange", "inTheMoney", "contractSize", "currency", "impliedVolatility", "ask", "bid"])
-    object = object[["strike", "openInterest"]]
+                                  "change", "percentChange", "openInterest", "inTheMoney", "contractSize", "currency", "impliedVolatility", "ask", "bid"])
+    object = object[["strike", "volume"]]
     return object
 
 
@@ -110,7 +104,6 @@ def displayCleanOptionChain():
     merged = merged.fillna("")
     # merged.style.hide_index()
     print(merged.to_string(index=False))
-    ############
 
 
 def OpenInterestChart():
@@ -119,36 +112,28 @@ def OpenInterestChart():
     finalFrame = pd.DataFrame(callData)
     finalFrame.rename(columns={'openInterest': 'Calls'}, inplace=True)
     tempFrame = pd.DataFrame(putData)
-
     tempFrame.rename(columns={'openInterest': 'Puts'}, inplace=True)
     # finalFrame = pd.concat([finalFrame, tempFrame])
     finalFrame = pd.merge(finalFrame, tempFrame, on='strike')
     finalFrame.plot.bar(figsize=(20, 8), x="strike", y=["Calls", "Puts"],
                         title="Open Interest for "+ticker.upper()+" all options at every strike on "+strikeChoice)
-
-    ####################
-    # fig = plt.figure()
-    # a = ScrollableWindow(fig)
-    plt.savefig("out.png")
-    img = Image.open('out.png')
-    img.show()
-    # plt.show(block=True)
+    fig = plt.figure()
+    plt.show(block=True)
+    # plt.savefig("out.png")
+    #img = Image.open('out.png')
+    # img.show()
     print("***********************")
-
-# dataframe place NaN with 0
 
 
 def OIHeatMap():
-    callsArray = heatCleaner(opt.calls)
-    callsArray.rename(columns={'openInterest': DateArray[1]}, inplace=True)
+    callsArray = OICleaner(opt.calls)
+    callsArray.rename(columns={'volume': DateArray[1]}, inplace=True)
     for x in range(2, len(DateArray)-1):
         opt2 = yf.Ticker(ticker).option_chain(DateArray[x])
-        callsArray2 = heatCleaner(opt2.calls)
+        callsArray2 = OICleaner(opt2.calls)
         callsArray2.rename(
-            columns={'openInterest': DateArray[x]}, inplace=True)
+            columns={'volume': DateArray[x]}, inplace=True)
         callsArray = pd.merge(callsArray, callsArray2, on='strike')
-    #
-
     callsArray.set_index('strike', inplace=True)
 
     print(callsArray)
@@ -160,20 +145,20 @@ def OIHeatMap():
     plt.yticks(rotation=0)
     plt.xticks(rotation=50)
     plt.gca().invert_yaxis()
-    plt.title("Open interest for all options of " + ticker + " per strike")
+    plt.title("Volume for all options of " + ticker + " per strike")
     plt.show()
+    threedeegraph(callsArrayStore)
 
 
 def VolumeHeatMap():
-    callsArray = heatCleaner2(opt.calls)
+    callsArray = VolumeCleaner(opt.calls)
     callsArray.rename(columns={'openInterest': DateArray[1]}, inplace=True)
     for x in range(2, len(DateArray)-1):
         opt2 = yf.Ticker(ticker).option_chain(DateArray[x])
-        callsArray2 = heatCleaner2(opt2.calls)
+        callsArray2 = VolumeCleaner(opt2.calls)
         callsArray2.rename(
             columns={'openInterest': DateArray[x]}, inplace=True)
         callsArray = pd.merge(callsArray, callsArray2, on='strike')
-    #
 
     callsArray.set_index('strike', inplace=True)
 
@@ -188,6 +173,7 @@ def VolumeHeatMap():
     plt.gca().invert_yaxis()
     plt.title("Volume for all options of " + ticker + " per strike")
     plt.show()
+    threedeegraph(callsArrayStore)
 
 
 def threedeegraph(object):
@@ -254,10 +240,10 @@ sortCallsandPuts()  # breaks options chain into essential data and sorts by call
 # displayCleanOptionChain()
 # OpenInterestChart()
 
-# VolumeHeatMap()
-OIHeatMap()
+VolumeHeatMap()
+# OIHeatMap()
 
-threedeegraph(callsArrayStore)
+# threedeegraph(callsArrayStore)
 
 
 # askForStrikePrice()  # prompts user to choose a strike from the table
