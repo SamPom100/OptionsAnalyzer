@@ -8,6 +8,7 @@ from GUI import *
 import seaborn as sb
 from mpl_toolkits.mplot3d import axes3d
 import numpy as np
+import sys
 
 # Default ticker is Apple
 ticker = "AMD"
@@ -53,24 +54,31 @@ def sortCallsandPuts():
     calls = cleaner(calls)
     calls['Mid Price'] = calls.apply(lambda row: (row.ask + row.bid)/2, axis=1)
     calls = calls.drop(columns=["ask", "bid"])
-    calls = calls[["strike", "Mid Price", "openInterest", "impliedVolatility"]]
+    calls = calls[["strike", "Mid Price", "openInterest", "volume"]]
 
     puts = opt.puts
     puts = cleaner(puts)
     puts['Mid Price'] = puts.apply(lambda row: (row.ask + row.bid)/2, axis=1)
     puts = puts.drop(columns=["ask", "bid"])
-    puts = puts[["strike", "Mid Price", "openInterest", "impliedVolatility"]]
+    puts = puts[["strike", "Mid Price", "openInterest", "volume"]]
 
 
 def cleaner(object):
     return object.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
-                                "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency"])
+                                "change", "percentChange", "impliedVolatility", "inTheMoney", "contractSize", "currency"])
 
 
 def heatCleaner(object):
     object = object.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
                                   "change", "percentChange", "volume", "inTheMoney", "contractSize", "currency", "impliedVolatility", "ask", "bid"])
     object = object[["strike", "openInterest"]]
+    return object
+
+
+def heatCleanerVOLUME(object):
+    object = object.drop(columns=["contractSymbol", "lastTradeDate", "lastPrice",
+                                  "change", "percentChange", "openInterest", "inTheMoney", "contractSize", "currency", "impliedVolatility", "ask", "bid"])
+    object = object[["strike", "volume"]]
     return object
 
 
@@ -97,8 +105,8 @@ def displayCleanOptionChain():
 
 
 def OIChart():
-    callData = calls.drop(columns=['Mid Price', 'impliedVolatility'])
-    putData = puts.drop(columns=['Mid Price', 'impliedVolatility'])
+    callData = calls.drop(columns=['Mid Price', 'volume'])
+    putData = puts.drop(columns=['Mid Price', 'volume'])
     finalFrame = pd.DataFrame(callData)
     finalFrame.rename(columns={'openInterest': 'Calls'}, inplace=True)
     tempFrame = pd.DataFrame(putData)
@@ -113,6 +121,7 @@ def OIChart():
     # fig = plt.figure()
     # a = ScrollableWindow(fig)
     plt.savefig("out.png")
+    plt.clf()
     img = Image.open('out.png')
     img.show()
     # plt.show(block=True)
@@ -144,6 +153,34 @@ def HeatMap():
     plt.xticks(rotation=50)
     plt.gca().invert_yaxis()
     plt.show()
+    plt.clf()
+
+
+def HeatMapVOLUME():
+    callsArray = heatCleanerVOLUME(opt.calls)
+    callsArray.rename(columns={'volume': DateArray[1]}, inplace=True)
+    for x in range(2, len(DateArray)-1):
+        opt2 = yf.Ticker(ticker).option_chain(DateArray[x])
+        callsArray2 = heatCleanerVOLUME(opt2.calls)
+        callsArray2.rename(
+            columns={'volume': DateArray[x]}, inplace=True)
+        callsArray = pd.merge(callsArray, callsArray2, on='strike')
+    #
+
+    callsArray.set_index('strike', inplace=True)
+    callsArray = callsArray.fillna(0)
+
+    print(callsArray)
+    # plt.style.use("dark_background")
+    heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
+
+    global callsArrayStore
+    callsArrayStore = callsArray
+    plt.yticks(rotation=0)
+    plt.xticks(rotation=50)
+    plt.gca().invert_yaxis()
+    plt.show()
+    plt.clf()
 
 
 def threedeegraph(object):
@@ -189,30 +226,58 @@ def threedeegraph(object):
     # name the axes
     ax.set_xlabel('Strike')
     ax.set_ylabel('Date')
-    ax.set_zlabel('Open Interest')
-    #fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
+    ax.set_zlabel('Open Interest / Volume')
+    # fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
 
     plt.show()
+    plt.clf()
 
 
 def askForStrikePrice():
     pickStrikePrice(calls['strike'].astype(str).tolist())
 
 
-askForTicker()  # get ticker of choice from user
-getOptionsChain(ticker)  # get entire option chain from yFinance
-# displayOptionsChain() #show entire option chain
-pickAStrike()  # asks user for specific date
-sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
-# displays calls and puts at once as a merged and cleaned table
-displayCleanOptionChain()
-# OIChart()
+def repeat():
+    print("PICK ONE: setticker, setstrike, optionchain, OIChart, volumeheat, OIheat, volume3D, OI3D, exit")
+    choice = input()
 
-HeatMap()
-threedeegraph(callsArrayStore)
+    if choice == "setticker":
+        askForTicker()  # get ticker of choice from user
+        getOptionsChain(ticker)  # get entire option chain from yFinance
+        repeat()
+    elif choice == "setstrike":
+        pickAStrike()  # asks user for specific date
+        # askForStrikePrice()  # prompts user to choose a strike from the table
+        # displayOptionsChain() #show entire option chain
+        repeat()
+    elif choice == "optionchain":
+        sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
+        displayCleanOptionChain()  # displays calls and puts as a clean table
+        repeat()
+    elif choice == "OIChart":
+        OIChart()
+        repeat()
+    elif choice == "volumeheat":
+        HeatMapVOLUME()
+        repeat()
+    elif choice == "OIheat":
+        HeatMap()
+        repeat()
+    elif choice == "volume3D":
+        HeatMapVOLUME()
+        threedeegraph(callsArrayStore)
+        repeat()
+    elif choice == "OI3D":
+        HeatMap()
+        threedeegraph(callsArrayStore)
+        repeat()
+    elif choice == "exit":
+        sys.exit()
+    else:
+        print("unexpected choice")
+        repeat()
 
 
-# askForStrikePrice()  # prompts user to choose a strike from the table
-
-
+print("******* \n Welcome to Sam's Option Scanner \n *******")
+repeat()
 print("All done")
