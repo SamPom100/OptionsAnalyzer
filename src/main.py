@@ -105,6 +105,7 @@ def displayCleanOptionChain():
 
 
 def OIChart():
+    sortCallsandPuts()
     callData = calls.drop(columns=['Mid Price', 'volume'])
     putData = puts.drop(columns=['Mid Price', 'volume'])
     finalFrame = pd.DataFrame(callData)
@@ -130,7 +131,7 @@ def OIChart():
 # dataframe place NaN with 0
 
 
-def CallsOIMap():  # plt.style.use("dark_background")
+def OIMap():  # plt.style.use("dark_background")
     callsArray = heatCleaner(opt.calls)
     callsArray.rename(columns={'openInterest': DateArray[1]}, inplace=True)
     for x in range(2, len(DateArray)-1):
@@ -273,7 +274,7 @@ def askForStrikePrice():
 
 
 def repeat():
-    print("PICK ONE: setticker, setstrike, optionchain, CallsOIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
+    print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
     choice = input()
 
     if choice == "setticker":
@@ -289,7 +290,7 @@ def repeat():
         sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
         displayCleanOptionChain()  # displays calls and puts as a clean table
         repeat()
-    elif choice == "CallsOIimage":
+    elif choice == "OIimage":
         OIChart()
         repeat()
     elif choice == "CallsVolumeMap":
