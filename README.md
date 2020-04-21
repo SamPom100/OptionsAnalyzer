@@ -1,7 +1,7 @@
 # OptionsAnalyzer (BETA VERSION)
 
 ## How to use the text menu
-*Commands are setticker, setstrike, optionchain, OIChart, volumeheat, OIheat, volume3D, OI3D, exit*
+*Commands are: setticker, setstrike, optionchain, CallsOIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit*
 * Start with setticker and enter a desired stock (ex: AMD)
 * Next, enter setstrike to pick a desired date
 * Now enter optionchain to load the calls and puts from yFinance
