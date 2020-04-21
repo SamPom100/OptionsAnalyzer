@@ -1,11 +1,10 @@
 # OptionsAnalyzer (BETA VERSION)
 
 ## How to use the text menu
-*Commands are: setticker, setstrike, optionchain, CallsOIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit*
-* Start with setticker and enter a desired stock (ex: AMD)
-* Next, enter setstrike to pick a desired date
-* Now enter optionchain to load the calls and puts from yFinance
-* After these 3 steps have been completed in order, you're free to load a heatmap or 3D bar graph of the option's open interest or volume for every date and strike, as well as a PNG of open interest / volume on a certain date
+*Commands are: setticker, setstrike, optionchain, OIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit*
+* Start with *setticker* and enter a desired stock (ex: AMD)
+* Next, enter *setstrike* to pick a desired date (enables further methods like OIimage and optionchain)
+* After these steps have been completed in order, you're free to load a heatmap or 3D bar graph of the option's open interest or volume for every date and strike, as well as a PNG of open interest / volume on a certain date
 
 ### Open Interest 3D Graph
 ![oi3d](https://user-images.githubusercontent.com/28206070/79798601-dc823600-831e-11ea-90da-963d36b70dbd.png)
