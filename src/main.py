@@ -140,6 +140,7 @@ def CallsOIMap():  # plt.style.use("dark_background")
             columns={'openInterest': DateArray[x]}, inplace=True)
         callsArray = pd.merge(callsArray, callsArray2, on='strike')
     callsArray.set_index('strike', inplace=True)
+    callsArray = callsArray.fillna(0)
     print(callsArray)
     heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
     global ArrayStore
@@ -161,6 +162,7 @@ def PutsOIMap():  # plt.style.use("dark_background")
             columns={'openInterest': DateArray[x]}, inplace=True)
         callsArray = pd.merge(callsArray, callsArray2, on='strike')
     callsArray.set_index('strike', inplace=True)
+    callsArray = callsArray.fillna(0)
     print(callsArray)
     heat_map = sb.heatmap(callsArray, cmap="Blues", linewidths=0)
     global ArrayStore
@@ -258,7 +260,7 @@ def threedeegraph(object):
 
     # name the axes
     ax.set_xlabel('Strike')
-    ax.set_ylabel('Date')
+    # ax.set_ylabel('Date')
     ax.set_zlabel('Open Interest / Volume')
     # fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
 
