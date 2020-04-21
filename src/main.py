@@ -17,7 +17,7 @@ strikeChoice = None
 opt = None
 calls = None
 puts = None
-callsArrayStore = None
+ArrayStore = None
 
 
 def askForTicker():
@@ -130,7 +130,7 @@ def OIChart():
 # dataframe place NaN with 0
 
 
-def HeatMap():
+def CallsOIMap():  # plt.style.use("dark_background")
     callsArray = heatCleaner(opt.calls)
     callsArray.rename(columns={'openInterest': DateArray[1]}, inplace=True)
     for x in range(2, len(DateArray)-1):
@@ -139,16 +139,11 @@ def HeatMap():
         callsArray2.rename(
             columns={'openInterest': DateArray[x]}, inplace=True)
         callsArray = pd.merge(callsArray, callsArray2, on='strike')
-    #
-
     callsArray.set_index('strike', inplace=True)
-
     print(callsArray)
-    # plt.style.use("dark_background")
     heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
-
-    global callsArrayStore
-    callsArrayStore = callsArray
+    global ArrayStore
+    ArrayStore = callsArray
     plt.yticks(rotation=0)
     plt.xticks(rotation=50)
     plt.gca().invert_yaxis()
@@ -156,7 +151,28 @@ def HeatMap():
     plt.clf()
 
 
-def HeatMapVOLUME():
+def PutsOIMap():  # plt.style.use("dark_background")
+    callsArray = heatCleaner(opt.puts)
+    callsArray.rename(columns={'openInterest': DateArray[1]}, inplace=True)
+    for x in range(2, len(DateArray)-1):
+        opt2 = yf.Ticker(ticker).option_chain(DateArray[x])
+        callsArray2 = heatCleaner(opt2.puts)
+        callsArray2.rename(
+            columns={'openInterest': DateArray[x]}, inplace=True)
+        callsArray = pd.merge(callsArray, callsArray2, on='strike')
+    callsArray.set_index('strike', inplace=True)
+    print(callsArray)
+    heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
+    global ArrayStore
+    ArrayStore = callsArray
+    plt.yticks(rotation=0)
+    plt.xticks(rotation=50)
+    plt.gca().invert_yaxis()
+    plt.show()
+    plt.clf()
+
+
+def CallsVolumeMap():
     callsArray = heatCleanerVOLUME(opt.calls)
     callsArray.rename(columns={'volume': DateArray[1]}, inplace=True)
     for x in range(2, len(DateArray)-1):
@@ -165,17 +181,34 @@ def HeatMapVOLUME():
         callsArray2.rename(
             columns={'volume': DateArray[x]}, inplace=True)
         callsArray = pd.merge(callsArray, callsArray2, on='strike')
-    #
-
     callsArray.set_index('strike', inplace=True)
     callsArray = callsArray.fillna(0)
-
     print(callsArray)
-    # plt.style.use("dark_background")
     heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
+    global ArrayStore
+    ArrayStore = callsArray
+    plt.yticks(rotation=0)
+    plt.xticks(rotation=50)
+    plt.gca().invert_yaxis()
+    plt.show()
+    plt.clf()
 
-    global callsArrayStore
-    callsArrayStore = callsArray
+
+def PutsVolumeMap():
+    callsArray = heatCleanerVOLUME(opt.puts)
+    callsArray.rename(columns={'volume': DateArray[1]}, inplace=True)
+    for x in range(2, len(DateArray)-1):
+        opt2 = yf.Ticker(ticker).option_chain(DateArray[x])
+        callsArray2 = heatCleanerVOLUME(opt2.puts)
+        callsArray2.rename(
+            columns={'volume': DateArray[x]}, inplace=True)
+        callsArray = pd.merge(callsArray, callsArray2, on='strike')
+    callsArray.set_index('strike', inplace=True)
+    callsArray = callsArray.fillna(0)
+    print(callsArray)
+    heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
+    global ArrayStore
+    ArrayStore = callsArray
     plt.yticks(rotation=0)
     plt.xticks(rotation=50)
     plt.gca().invert_yaxis()
@@ -238,7 +271,7 @@ def askForStrikePrice():
 
 
 def repeat():
-    print("PICK ONE: setticker, setstrike, optionchain, OIChart, volumeheat, OIheat, volume3D, OI3D, exit")
+    print("PICK ONE: setticker, setstrike, optionchain, CallsOIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
     choice = input()
 
     if choice == "setticker":
@@ -254,22 +287,36 @@ def repeat():
         sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
         displayCleanOptionChain()  # displays calls and puts as a clean table
         repeat()
-    elif choice == "OIChart":
+    elif choice == "CallsOIimage":
         OIChart()
         repeat()
-    elif choice == "volumeheat":
-        HeatMapVOLUME()
+    elif choice == "CallsVolumeMap":
+        CallsVolumeMap()
         repeat()
-    elif choice == "OIheat":
-        HeatMap()
+    elif choice == "CallsOIMap":
+        CallsOIMap()
         repeat()
-    elif choice == "volume3D":
-        HeatMapVOLUME()
-        threedeegraph(callsArrayStore)
+    elif choice == "PutsVolumeMap":
+        PutsVolumeMap()
         repeat()
-    elif choice == "OI3D":
-        HeatMap()
-        threedeegraph(callsArrayStore)
+    elif choice == "PutsOIMap":
+        PutsOIMap()
+        repeat()
+    elif choice == "CallVolume3D":
+        CallsVolumeMap()
+        threedeegraph(ArrayStore)
+        repeat()
+    elif choice == "CallOI3D":
+        CallsOIMap()
+        threedeegraph(ArrayStore)
+        repeat()
+    elif choice == "PutVolume3D":
+        PutsVolumeMap()
+        threedeegraph(ArrayStore)
+        repeat()
+    elif choice == "PutOI3D":
+        PutsOIMap()
+        threedeegraph(ArrayStore)
         repeat()
     elif choice == "exit":
         sys.exit()
