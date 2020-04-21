@@ -162,7 +162,7 @@ def PutsOIMap():  # plt.style.use("dark_background")
         callsArray = pd.merge(callsArray, callsArray2, on='strike')
     callsArray.set_index('strike', inplace=True)
     print(callsArray)
-    heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
+    heat_map = sb.heatmap(callsArray, cmap="Blues", linewidths=0)
     global ArrayStore
     ArrayStore = callsArray
     plt.yticks(rotation=0)
@@ -206,7 +206,7 @@ def PutsVolumeMap():
     callsArray.set_index('strike', inplace=True)
     callsArray = callsArray.fillna(0)
     print(callsArray)
-    heat_map = sb.heatmap(callsArray, cmap="Reds", linewidths=0)
+    heat_map = sb.heatmap(callsArray, cmap="Blues", linewidths=0)
     global ArrayStore
     ArrayStore = callsArray
     plt.yticks(rotation=0)
