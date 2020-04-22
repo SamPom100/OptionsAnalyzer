@@ -26,7 +26,7 @@ def askForTicker():
     global ticker, strikeChoice, opt
     ticker = onButton()
     print("Ticker was: " + ticker)
-    # pickAStrike2()  # <---- breaking my shit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # pickAStrike2()  # <---- causes ZSH error
 
 
 def getOptionsChain(inputString):
@@ -230,54 +230,39 @@ def PutsVolumeMap():
 
 def threedeegraph(object):
 
-    print("1")
     eg = object
-
-    print("2")
     # thickness of the bars
     dx, dy = .8, .8
-
-    print("3")
     # prepare 3d axes
     fig = plt.figure(figsize=(10, 6))
     ax = Axes3D(fig)
-
-    print("4")
     # set up positions for the bars
     xpos = np.arange(eg.shape[0])
     ypos = np.arange(eg.shape[1])
-    print("5")
     # set the ticks in the middle of the bars
     ax.set_xticks(xpos + dx/2)
     ax.set_yticks(ypos + dy/2)
-    print("6")
     # create meshgrid
     # print xpos before and after this block if not clear
     xpos, ypos = np.meshgrid(xpos, ypos)
     xpos = xpos.flatten()
     ypos = ypos.flatten()
-    print("7")
     # the bars starts from 0 attitude
     zpos = np.zeros(eg.shape).flatten()
-    print("8")
     # the bars' heights
     dz = eg.values.ravel()
-    print("9")
     # plot and color
     values = np.linspace(0.2, 1., xpos.ravel().shape[0])
     colors = cm.rainbow(values)
     ax.bar3d(xpos, ypos, zpos, dx, dy, dz, color=colors)
-    print("10")
     # put the column / index labels
     ax.w_yaxis.set_ticklabels(eg.columns)
     ax.w_xaxis.set_ticklabels(eg.index)
-    print("11")
     # name the axes
     ax.set_xlabel('Strike')
     # ax.set_ylabel('Date')
     ax.set_zlabel('Open Interest / Volume')
     # fig.colorbar(surf1, ax=ax1, shrink=0.5, aspect=5)
-    print("12")
     plt.show()
     plt.clf()
 
