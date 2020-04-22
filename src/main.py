@@ -275,7 +275,7 @@ def askForStrikePrice():
 
 def setticker():
     askForTicker()
-    getOptionsChain()
+    getOptionsChain(ticker)
 
 
 def optionchainMENU():
@@ -303,92 +303,92 @@ def putVolumemenu():
     threedeegraph(ArrayStore)
 
 
-menuDICT = {
-    "setTicker": setticker(),
-    "setStrike": pickAStrike(),
-    "optionChain": optionchainMENU(),
-    "OImage": OIChart(),
-    "CallVolumeMap": CallsVolumeMap(),
-    "CallOIMap": CallsOIMap(),
-    "PutVolumeMap": PutsVolumeMap(),
-    "PutsOIMap": PutsOIMap(),
-    "CallVolume3D": callVolumemenu(),
-    "CallOI3D": callOI3dmenu(),
-    "PutVolume3D": putVolumemenu(),
-    "PutOI3D": putOI3dmenu(),
-    "exit": sys.exit()
-}
+def mainMENUswitch():
+    def switchBoard(arguement):
+        switcher = {
+            "setTicker": setticker(),
+            "setStrike": pickAStrike(),
+            "optionChain": optionchainMENU(),
+            "OImage": OIChart(),
+            "CallVolumeMap": CallsVolumeMap(),
+            "CallOIMap": CallsOIMap(),
+            "PutVolumeMap": PutsVolumeMap(),
+            "PutsOIMap": PutsOIMap(),
+            "CallVolume3D": callVolumemenu(),
+            "CallOI3D": callOI3dmenu(),
+            "PutVolume3D": putVolumemenu(),
+            "PutOI3D": putOI3dmenu(),
+            "exit": sys.exit(),
+        }
+        func = switcher.get(arguement, lambda: "nothing")
+        return func
+
+    print("******* \n Welcome to Sam's Option Scanner \n *******")
+    while(True):
+        print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallVolumeMap, CallOIMap, PutVolumeMap, PutOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
+        choice = input()
+        switchBoard(choice)
 
 
-def repeat():
-    print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallVolumeMap, CallOIMap, PutVolumeMap, PutOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
-    choice = input()
-    menuDICT[choice]()
+def mainMENUnested():
+    def repeat():
+        print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
+        choice = input()
+
+        if choice == "setticker":
+            askForTicker()  # get ticker of choice from user
+            getOptionsChain(ticker)  # get entire option chain from yFinance
+            repeat()
+        elif choice == "setstrike":
+            pickAStrike()  # asks user for specific date
+            # askForStrikePrice()  # prompts user to choose a strike from the table
+            # displayOptionsChain() #show entire option chain
+            repeat()
+        elif choice == "optionchain":
+            sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
+            displayCleanOptionChain()  # displays calls and puts as a clean table
+            repeat()
+        elif choice == "OIimage":
+            OIChart()
+            repeat()
+        elif choice == "CallsVolumeMap":
+            CallsVolumeMap()
+            repeat()
+        elif choice == "CallsOIMap":
+            CallsOIMap()
+            repeat()
+        elif choice == "PutsVolumeMap":
+            PutsVolumeMap()
+            repeat()
+        elif choice == "PutsOIMap":
+            PutsOIMap()
+            repeat()
+        elif choice == "CallVolume3D":
+            CallsVolumeMap()
+            threedeegraph(ArrayStore)
+            repeat()
+        elif choice == "CallOI3D":
+            CallsOIMap()
+            threedeegraph(ArrayStore)
+            repeat()
+        elif choice == "PutVolume3D":
+            PutsVolumeMap()
+            threedeegraph(ArrayStore)
+            repeat()
+        elif choice == "PutOI3D":
+            PutsOIMap()
+            threedeegraph(ArrayStore)
+            repeat()
+        elif choice == "exit":
+            sys.exit()
+        else:
+            print("unexpected choice")
+            repeat()
+
+    print("******* \n Welcome to Sam's Option Scanner \n *******")
     repeat()
 
 
-print("******* \n Welcome to Sam's Option Scanner \n *******")
-repeat()
-print("shouldn't see this")
-
-
-""" 
-def repeat():
-    print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
-    choice = input()
-
-    if choice == "setticker":
-        askForTicker()  # get ticker of choice from user
-        getOptionsChain(ticker)  # get entire option chain from yFinance
-        repeat()
-    elif choice == "setstrike":
-        pickAStrike()  # asks user for specific date
-        # askForStrikePrice()  # prompts user to choose a strike from the table
-        # displayOptionsChain() #show entire option chain
-        repeat()
-    elif choice == "optionchain":
-        sortCallsandPuts()  # breaks options chain into essential data and sorts by calls / puts
-        displayCleanOptionChain()  # displays calls and puts as a clean table
-        repeat()
-    elif choice == "OIimage":
-        OIChart()
-        repeat()
-    elif choice == "CallsVolumeMap":
-        CallsVolumeMap()
-        repeat()
-    elif choice == "CallsOIMap":
-        CallsOIMap()
-        repeat()
-    elif choice == "PutsVolumeMap":
-        PutsVolumeMap()
-        repeat()
-    elif choice == "PutsOIMap":
-        PutsOIMap()
-        repeat()
-    elif choice == "CallVolume3D":
-        CallsVolumeMap()
-        threedeegraph(ArrayStore)
-        repeat()
-    elif choice == "CallOI3D":
-        CallsOIMap()
-        threedeegraph(ArrayStore)
-        repeat()
-    elif choice == "PutVolume3D":
-        PutsVolumeMap()
-        threedeegraph(ArrayStore)
-        repeat()
-    elif choice == "PutOI3D":
-        PutsOIMap()
-        threedeegraph(ArrayStore)
-        repeat()
-    elif choice == "exit":
-        sys.exit()
-    else:
-        print("unexpected choice")
-        repeat()
-
-
-print("******* \n Welcome to Sam's Option Scanner \n *******")
-repeat() 
-"""
+#############################
+mainMENUnested()
 print("All done")
