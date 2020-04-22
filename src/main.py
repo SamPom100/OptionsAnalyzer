@@ -11,13 +11,13 @@ import numpy as np
 import sys
 
 
-# Default ticker is Apple
+# pre-set values
 ticker = "AMD"
 DateArray = yf.Ticker(ticker).options
-strikeChoice = None
-opt = None
-calls = None
-puts = None
+strikeChoice = DateArray[2]
+opt = yf.Ticker(ticker).option_chain(strikeChoice)
+calls = opt.calls
+puts = opt.puts
 ArrayStore = None
 
 
