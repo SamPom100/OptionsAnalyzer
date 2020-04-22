@@ -10,6 +10,7 @@ from mpl_toolkits.mplot3d import axes3d
 import numpy as np
 import sys
 
+
 # Default ticker is Apple
 ticker = "AMD"
 DateArray = yf.Ticker(ticker).options
@@ -306,28 +307,27 @@ def putVolumemenu():
 def mainMENUswitch():
     def switchBoard(arguement):
         switcher = {
-            "setTicker": setticker(),
-            "setStrike": pickAStrike(),
-            "optionChain": optionchainMENU(),
-            "OImage": OIChart(),
-            "CallVolumeMap": CallsVolumeMap(),
-            "CallOIMap": CallsOIMap(),
-            "PutVolumeMap": PutsVolumeMap(),
-            "PutsOIMap": PutsOIMap(),
-            "CallVolume3D": callVolumemenu(),
-            "CallOI3D": callOI3dmenu(),
-            "PutVolume3D": putVolumemenu(),
-            "PutOI3D": putOI3dmenu(),
-            "exit": sys.exit(),
+            "setTicker": lambda: setticker(),
+            "setStrike": lambda: pickAStrike(),
+            "optionChain": lambda: optionchainMENU(),
+            "OImage": lambda: OIChart(),
+            "CallVolumeMap": lambda: CallsVolumeMap(),
+            "CallOIMap": lambda: CallsOIMap(),
+            "PutVolumeMap": lambda: PutsVolumeMap(),
+            "PutsOIMap": lambda: PutsOIMap(),
+            "CallVolume3D": lambda: callVolumemenu(),
+            "CallOI3D": lambda: callOI3dmenu(),
+            "PutVolume3D": lambda: putVolumemenu(),
+            "PutOI3D": lambda: putOI3dmenu(),
+            "exit": lambda: sys.exit,
         }
-        func = switcher.get(arguement, lambda: "nothing")
-        return func
+        return switcher.get(arguement, lambda: "error")()
 
     print("******* \n Welcome to Sam's Option Scanner \n *******")
     while(True):
         print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallVolumeMap, CallOIMap, PutVolumeMap, PutOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
         choice = input()
-        switchBoard(choice)
+        switchBoard(choice)()
 
 
 def mainMENUnested():
@@ -389,6 +389,6 @@ def mainMENUnested():
     repeat()
 
 
-#############################
+# mainMENUswitch()
 mainMENUnested()
 print("All done")
