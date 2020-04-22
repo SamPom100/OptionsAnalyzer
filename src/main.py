@@ -131,7 +131,7 @@ def OIChart():
 # dataframe place NaN with 0
 
 
-def OIMap():  # plt.style.use("dark_background")
+def CallsOIMap():  # plt.style.use("dark_background")
     callsArray = heatCleaner(opt.calls)
     callsArray.rename(columns={'openInterest': DateArray[1]}, inplace=True)
     for x in range(2, len(DateArray)-1):
@@ -273,6 +273,66 @@ def askForStrikePrice():
     pickStrikePrice(calls['strike'].astype(str).tolist())
 
 
+def setticker():
+    askForTicker()
+    getOptionsChain()
+
+
+def optionchainMENU():
+    sortCallsandPuts()
+    displayOptionsChain()
+
+
+def callOI3dmenu():
+    CallsOIMap()
+    threedeegraph(ArrayStore)
+
+
+def putOI3dmenu():
+    PutsOIMap()
+    threedeegraph(ArrayStore)
+
+
+def callVolumemenu():
+    CallsVolumeMap()
+    threedeegraph(ArrayStore)
+
+
+def putVolumemenu():
+    PutsVolumeMap()
+    threedeegraph(ArrayStore)
+
+
+menuDICT = {
+    "setTicker": setticker(),
+    "setStrike": pickAStrike(),
+    "optionChain": optionchainMENU(),
+    "OImage": OIChart(),
+    "CallVolumeMap": CallsVolumeMap(),
+    "CallOIMap": CallsOIMap(),
+    "PutVolumeMap": PutsVolumeMap(),
+    "PutsOIMap": PutsOIMap(),
+    "CallVolume3D": callVolumemenu(),
+    "CallOI3D": callOI3dmenu(),
+    "PutVolume3D": putVolumemenu(),
+    "PutOI3D": putOI3dmenu(),
+    "exit": sys.exit()
+}
+
+
+def repeat():
+    print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallVolumeMap, CallOIMap, PutVolumeMap, PutOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
+    choice = input()
+    menuDICT[choice]()
+    repeat()
+
+
+print("******* \n Welcome to Sam's Option Scanner \n *******")
+repeat()
+print("shouldn't see this")
+
+
+""" 
 def repeat():
     print("PICK ONE: setticker, setstrike, optionchain, OIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit")
     choice = input()
@@ -329,5 +389,6 @@ def repeat():
 
 
 print("******* \n Welcome to Sam's Option Scanner \n *******")
-repeat()
+repeat() 
+"""
 print("All done")
