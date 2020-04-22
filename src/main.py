@@ -26,7 +26,7 @@ def askForTicker():
     global ticker, strikeChoice, opt
     ticker = onButton()
     print("Ticker was: " + ticker)
-    pickAStrike2()  # <---- breaking my shit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # pickAStrike2()  # <---- breaking my shit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 def getOptionsChain(inputString):
