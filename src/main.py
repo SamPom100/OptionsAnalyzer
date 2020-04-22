@@ -27,7 +27,7 @@ def askForTicker():
     global ticker, strikeChoice, opt
     ticker = onButton()
     print("Ticker was: " + ticker)
-    # pickAStrike2()  # <---- causes ZSH error
+    # pickAStrike2()  # <---- causes ZSH error (toDO)
 
 
 def getOptionsChain(inputString):
