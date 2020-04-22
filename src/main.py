@@ -12,7 +12,7 @@ import sys
 
 
 # pre-set values
-# aaaa
+
 ticker = "AMD"
 DateArray = yf.Ticker(ticker).options
 strikeChoice = DateArray[2]
