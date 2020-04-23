@@ -28,7 +28,7 @@ def pickStrikePrice(choices):
         def __init__(self, parent):
             super(MyPanel, self).__init__(parent)
             self.label = wx.StaticText(
-                self, label="Pick a Strike Price:", pos=(50, 30))
+                self, label="Pick a Strike Date:", pos=(50, 30))
             languages = choices
             self.combobox = wx.ComboBox(self, choices=languages, pos=(50, 50))
             self.label2 = wx.StaticText(self, label="", pos=(50, 80))
