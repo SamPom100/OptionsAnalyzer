@@ -1,7 +1,4 @@
 # OptionsAnalyzer (BETA VERSION)
-* Run autoPIP.sh by typing sh autoPIP.sh in terminal in your IDE to install all required modules
-
-
 
 **************************************
 
@@ -11,6 +8,8 @@
 </p>
 
 **************************************
+
+* Run autoPIP.sh by typing sh autoPIP.sh in terminal in your IDE to install all required modules
 
 ## How to use the text menu
 *Commands are: setticker, setstrike, optionchain, OIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit*
