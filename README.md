@@ -7,7 +7,7 @@
 
 <p align="center">
   <b>If you encounter a ZSH segmentation fault</b><br>
-  <a href="https://github.com/SamPom100/ObjectBased_OptionsAnalyzer">use this repo</a>
+  <a href="https://github.com/SamPom100/ObjectBased_OptionsAnalyzer">use this repo instead</a>
 </p>
 
 **************************************
