@@ -1,11 +1,8 @@
 # OptionsAnalyzer (BETA VERSION)
 * Run autoPIP.sh by typing sh autoPIP.sh in terminal in your IDE to install all required modules
 
-***********************************************************
-        If you encounter a ZSH fault while using the code, use [this repo instead](https://github.com/SamPom100/ObjectBased_OptionsAnalyzer)
-***********************************************************
 
-[this repo instead](https://github.com/SamPom100/ObjectBased_OptionsAnalyzer)
+If you encounter a ZSH segmentation fault, use [this repo instead](https://github.com/SamPom100/ObjectBased_OptionsAnalyzer)
 
 
 ## How to use the text menu
