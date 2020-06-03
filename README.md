@@ -3,8 +3,8 @@
 **************************************
 
 <p align="center">
-  <b>If you encounter a ZSH segmentation fault</b><br>
-  <a href="https://github.com/SamPom100/ObjectBased_OptionsAnalyzer">use this repo instead</a>
+  <b>If you encounter a ZSH segmentation fault OR want to try the updated version</b><br>
+  <a href="https://github.com/SamPom100/ObjectBased_OptionsAnalyzer">click hered</a>
 </p>
 
 **************************************
