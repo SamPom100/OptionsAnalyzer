@@ -2,11 +2,11 @@
 * Run autoPIP.sh by typing sh autoPIP.sh in terminal in your IDE to install all required modules
 
 **************************************
-If you encounter a ZSH segmentation fault, use [this repo instead](https://github.com/SamPom100/ObjectBased_OptionsAnalyzer)
+
 **************************************
 
 <p align="center">
-  <b>Some Links:</b><br>
+  <b>If you encounter a ZSH segmentation fault, use [this repo instead](https://github.com/SamPom100/ObjectBased_OptionsAnalyzer)</b><br>
 </p>
 
 ## How to use the text menu
