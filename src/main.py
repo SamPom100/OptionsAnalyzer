@@ -6,7 +6,6 @@ from matplotlib import cm
 from PIL import Image
 from GUI import *
 import seaborn as sb
-from mpl_toolkits.mplot3d import axes3d
 import numpy as np
 import sys
 
