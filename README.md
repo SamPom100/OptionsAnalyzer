@@ -6,7 +6,8 @@
 **************************************
 
 <p align="center">
-  <b>If you encounter a ZSH segmentation fault, use [this repo instead](https://github.com/SamPom100/ObjectBased_OptionsAnalyzer)</b><br>
+  <b>If you encounter a ZSH segmentation fault</b><br>
+  <a href="https://github.com/SamPom100/ObjectBased_OptionsAnalyzer">use this repo</a>
 </p>
 
 ## How to use the text menu
