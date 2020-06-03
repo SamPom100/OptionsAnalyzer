@@ -5,6 +5,10 @@
 If you encounter a ZSH segmentation fault, use [this repo instead](https://github.com/SamPom100/ObjectBased_OptionsAnalyzer)
 **************************************
 
+<p align="center">
+  <b>Some Links:</b><br>
+</p>
+
 ## How to use the text menu
 *Commands are: setticker, setstrike, optionchain, OIimage, CallsVolumeMap, CallsOIMap, PutsVolumeMap, PutsOIMap, CallVolume3D, CallOI3D, PutVolume3D, PutOI3D, exit*
 * Start with *setticker* and enter a desired stock (ex: AMD)
