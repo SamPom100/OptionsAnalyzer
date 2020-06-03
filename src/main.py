@@ -250,7 +250,7 @@ def threedeegraph(object):
     # the bars starts from 0 attitude
     zpos = np.zeros(eg.shape).flatten()
     # the bars' heights
-    dz = eg.values.ravel()
+    dz = eg.values.ravel(order='F')
     # plot and color
     values = np.linspace(0.2, 1., xpos.ravel().shape[0])
     colors = cm.rainbow(values)
