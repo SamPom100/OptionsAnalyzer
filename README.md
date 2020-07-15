@@ -37,3 +37,8 @@
 
 ### Text option chain
 <img width="605" alt="Screen Shot 2020-04-20 at 3 52 48 PM" src="https://user-images.githubusercontent.com/28206070/79798734-05a2c680-831f-11ea-8ebe-9d8942b80d5f.png">
+
+---
+
+Created by [Sam Pomerantz](https://sampomerantz.me)
+
